@@ -7,7 +7,7 @@ from tqdm import tqdm
   
 
 sa = gspread.service_account()
-sh = sa.open("2023 Fall Semester Shift Sign-in Sheet, 10/16")
+sh = sa.open("Copy of 2023 Fall Semester Shift Sign-in Sheet 11/13")
 current_date = input("Enter the start date in MM/DD/YYYY format\n")
 
 workStudy_names_dict = {"Mills, Marissa": {}, "Butera, Salvatore": {}, "Cancel, David": {}, "Etyang, Arthur": {}, "Godbey, Kaelyn": {}, "Gomez, Kenny": {}, "Ibarra, Christyanna": {}, "Landes, Mahlon": {}, "Mendoza, Vanessa": {}, "Mihaileanu, George": {}, "Nosike, Austin": {}, "Pembleton, Aidan": {}, "Potter, Chandler": {}, "Quartey, Eric": {}, "Ramirez, Jose": {},  "Rodas, Melvin": {}, "Rojas, Roberto": {}, "Sandoval, Edwin": {}, "Simons, Emma": {}, "Tenet, Brooke": {}, "West, Sydney": {}, "Angelina, Zubricki": {}}
@@ -172,5 +172,8 @@ while True:
     print("###############################\n")
     time_sheet_for_name(current_workstudy, cumulative_hours)
     
+
+
+
 
 
