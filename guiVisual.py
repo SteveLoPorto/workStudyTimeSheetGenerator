@@ -29,30 +29,47 @@ mainTitleLabel =  customtkinter.CTkLabel(root, text=mainTitleText, font=mainTitl
 mainTitleLabel.place(x=350, y=25)
 
 #make a credientials frame
-credientialsFrame = customtkinter.CTkFrame(master=root, width=300, height=60)
+credentialsFrame = customtkinter.CTkFrame(master=root, width=300, height=60)
 
 #place the credientials frame
-credientialsFrame.place(x=30, y=543)
+credentialsFrame.place(x=30, y=125)
 
 #credientials label
 credentialsLabelText = "Credientals File Path"
 credentialsLabelFont = ("Helvetica", 12, "bold")
-credentialsLabel = customtkinter.CTkLabel(credientialsFrame, text=credentialsLabelText, font=credentialsLabelFont, anchor='center')
+credentialsLabel = customtkinter.CTkLabel(credentialsFrame, text=credentialsLabelText, font=credentialsLabelFont, anchor='center')
 
 #make credientials text box
 credentialsTextBoxFont = ("Helvetica", 12)
-credentialsTextBox = customtkinter.CTkTextbox(credientialsFrame, width=275, height=8, border_width=4, corner_radius=2, font=credentialsTextBoxFont)
+credentialsTextBox = customtkinter.CTkTextbox(credentialsFrame, width=275, height=8, border_width=4, corner_radius=2, font=credentialsTextBoxFont)
 
 #place credientials label and text box
 credentialsLabel.place(x=20, y=0)
 credentialsTextBox.place(x=10, y=25)
+
+#load info image button
+infoButtonImage = Image.open('./guiImages/infoButton.png').resize((15,15))
+infoButtonPhoto = customtkinter.CTkImage(infoButtonImage, size=(15, 15))
+
+#info hover button for the image text box
+credentialsInfoButton = customtkinter.CTkButton(credentialsFrame, image=infoButtonPhoto, text="", width=0, height=0, border_spacing=0, fg_color='transparent', hover=False)
+
+credentialsInfoButtonText = 'Enter the file path to the credentials.json file'
+ToolTip(credentialsInfoButton, msg=credentialsInfoButtonText, delay=0.01, follow=True,
+        parent_kwargs={"bg": "#2A2827", "padx": 3, "pady": 3},
+        fg="#C6C6C6", bg="#4D4948", padx=7, pady=7)
+
+#place the button
+credentialsInfoButton.place(x=135, y=3)
+
+
 
 
 #frame for sheet name label and textbox
 inputFrame = customtkinter.CTkFrame(master=root, width=300, height=400)
 
 #place sheet frame
-inputFrame.place(x=30, y=125)
+inputFrame.place(x=365, y=125)
 
 #sheetNameFrame text box
 sheetNameTextBoxFont = ("Helvetica", 12)
@@ -170,7 +187,7 @@ totalWorkStudyNamesInfoButton.place(x=125, y=213)
 workStudyNameListBoxFrame = customtkinter.CTkFrame(master=root, width=300, height=400)
 
 #place frame
-workStudyNameListBoxFrame.place(x=350, y=125)
+workStudyNameListBoxFrame.place(x=35, y=125)
 
 #Defime work study name listbox 
 workStudyNamesListBox = CTkListbox(workStudyNameListBoxFrame, width=250, height=325)
@@ -201,13 +218,13 @@ workStudyListBoxInfoButton.place(x=97 ,y=5)
 
 
 #create a resultFrame for the work study results 
-resultFrame = customtkinter.CTkFrame(master=root, width=300, height=400)
+resultFrame = customtkinter.CTkFrame(master=root, width=450, height=400)
 #place result frame
-resultFrame.place(x=675,y=125)
+resultFrame.place(x=525,y=125)
 
 
 #Defime work study result list 
-workStudyResultListBox = CTkListbox(resultFrame, width=250, height=325)
+workStudyResultListBox = CTkListbox(resultFrame, width=395, height=325)
 
 #define work studyListBoxLabel
 workStudyResultListBoxLabelText = "Work Study Results"
@@ -218,6 +235,54 @@ WorkStudyResultListBoxLabel = customtkinter.CTkLabel(resultFrame, text=workStudy
 WorkStudyResultListBoxLabel.place(x=20, y=2)
 workStudyResultListBox.place(x=10,y=30)
 
+#create a label for workStudy Name
+currentWorkStudyNameLabelText = ""
+currentWorkStudyNameLabelFont = ("Helvetica", 12, "bold")
+currentWorkStudyNameLabel = customtkinter.CTkLabel(resultFrame, text=currentWorkStudyNameLabelText, font=currentWorkStudyNameLabelFont, anchor='center')
+
+#place the work study name label
+currentWorkStudyNameLabel.place(x=200, y=1)
+
+#make a cumulative hour frame
+cumulativeHoursFrame = customtkinter.CTkFrame(master=root, width=135, height=60)
+
+#place the cumulative hour frame
+cumulativeHoursFrame.place(x=360, y=125)
+
+#define cumulative Hour labe
+cumulativeHoursLabelText = "Cumulative Hours"
+cumulativeHoursLabelFont = ("Helvetica", 12, "bold")
+cumulativeHoursLabel = customtkinter.CTkLabel(cumulativeHoursFrame, text=cumulativeHoursLabelText, font=cumulativeHoursLabelFont, anchor='center')
+
+#define cumulative hour text box
+cumulativeHoursTextBoxFont = ("Helvetica", 12, "bold")
+cumulativeHoursTextBox = customtkinter.CTkTextbox(cumulativeHoursFrame, width=100, height=10, border_width=5, corner_radius=2, font=cumulativeHoursTextBoxFont)
+
+#place the cumulative hour frame
+cumulativeHoursLabel.place(x=14, y=0)
+cumulativeHoursTextBox.place(x=14, y=25)
+
+#create display button
+displayButtonFont = ("Helvetica", 12, "bold")
+displayButtonText = "Display"
+displayButton = customtkinter.CTkButton(root, height=30, width=120, text=displayButtonText, state='disabled')
+
+#place button
+displayButton.place(x=365, y=200)
+
+#load info image button
+infoButtonImage = Image.open('./guiImages/infoButton.png').resize((15,15))
+infoButtonPhoto = customtkinter.CTkImage(infoButtonImage, size=(15, 15))
+
+#info hover button for the cumulative hours text box
+cumulativeHoursInfoButton = customtkinter.CTkButton(cumulativeHoursFrame, image=infoButtonPhoto, text="", width=0, height=0, border_spacing=0, fg_color='transparent', hover=False)
+
+cumulativeHoursInfoButtonText = 'Eneter the current work studies cumulative hours'
+ToolTip(cumulativeHoursInfoButton, msg=cumulativeHoursInfoButtonText, delay=0.01, follow=True,
+        parent_kwargs={"bg": "#2A2827", "padx": 3, "pady": 3},
+        fg="#C6C6C6", bg="#4D4948", padx=7, pady=7)
+
+cumulativeHoursInfoButton.place(x=115, y=3)
 
 #load info image button
 infoButtonImage = Image.open('./guiImages/infoButton.png').resize((15,15))
@@ -242,7 +307,15 @@ generateButtonText = "Generate"
 generateButton = customtkinter.CTkButton(root, text=generateButtonText, command=lambda:guiController.generate(widgets))
 
 #place button
-generateButton.place(x=425, y=565)
+generateButton.place(x=438, y=565)
+
+#make a back button
+backButtonFont = ("Helvetica", 12, "bold")
+backButtonText = "Back"
+backButton = customtkinter.CTkButton(root, text=backButtonText, command=lambda:guiController.backButtonClick())
+
+#place button
+backButton.place(x=30, y=75)
 
 #puts all the widget in the widget dictonary 
 widgets["root"] = root
@@ -259,10 +332,31 @@ widgets["endDateInfoButton"] = endDateInfoButton
 widgets["totalWorkStudyNamesTextBox"] = totalWorkStudyNamesTextBox
 widgets["totalWorkStudyNamesLabel"] = totalWorkStudyNamesLabel
 widgets["totalWorkStudyNamesInfoButton"] = totalWorkStudyNamesInfoButton
+widgets["workStudyNameListBoxFrame"] = workStudyNameListBoxFrame
 widgets["workStudyNamesListBox"] = workStudyNamesListBox
 widgets["workStudyListBoxInfoButton"] = workStudyListBoxInfoButton
 widgets["workStudyResultListBox"] = workStudyResultListBox
 widgets["workStudyResultListBoxInfoButton"] = workStudyResultListBoxInfoButton
+widgets["resultFrame"] = resultFrame
+widgets["credentialsTextBox"] = credentialsTextBox
+widgets["credentialsInfoButton"] = credentialsInfoButton
+widgets["credentialsLabel"] = credentialsLabel
 widgets["generateButton"] = generateButton
+widgets["cumulativeHoursTextBox"] = cumulativeHoursTextBox
+widgets["cumulativeHoursLabel"] = cumulativeHoursLabel
+widgets["displayButton"] = displayButton
+widgets["inputFrame"] = inputFrame
+widgets["credentialsFrame"] = credentialsFrame
+widgets["cumulativeHoursFrame"] = cumulativeHoursFrame
+widgets["backButton"] = backButton    
+widgets["currentWorkStudyNameLabel"] = currentWorkStudyNameLabel
+
+#hide every frame but the input frame and the credientials frame
+
+workStudyNameListBoxFrame.place_forget()
+resultFrame.place_forget()
+cumulativeHoursFrame.place_forget()
+displayButton.place_forget()
+backButton.place_forget()
 
 root.mainloop()

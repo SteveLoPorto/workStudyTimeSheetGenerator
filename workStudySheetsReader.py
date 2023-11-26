@@ -1,41 +1,15 @@
+import re
 import gspread
 import time
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 import calendar
 import numpy as np
 from tqdm import tqdm
   
 
-sa = gspread.service_account()
-sh = sa.open("Copy of 2023 Fall Semester Shift Sign-in Sheet 11/13")
-current_date = input("Enter the start date in MM/DD/YYYY format\n")
-
-workStudy_names_dict = {"Mills, Marissa": {}, "Butera, Salvatore": {}, "Cancel, David": {}, "Etyang, Arthur": {}, "Godbey, Kaelyn": {}, "Gomez, Kenny": {}, "Ibarra, Christyanna": {}, "Landes, Mahlon": {}, "Mendoza, Vanessa": {}, "Mihaileanu, George": {}, "Nosike, Austin": {}, "Pembleton, Aidan": {}, "Potter, Chandler": {}, "Quartey, Eric": {}, "Ramirez, Jose": {},  "Rodas, Melvin": {}, "Rojas, Roberto": {}, "Sandoval, Edwin": {}, "Simons, Emma": {}, "Tenet, Brooke": {}, "West, Sydney": {}, "Angelina, Zubricki": {}}
-
-workStudy_names_list = list(workStudy_names_dict.keys())
-
-year = current_date[6:]
-#print("year = " + year + "\n")
-
-day = current_date[3:5]
-#print("day = " + day + "\n")
-
-
-month = current_date[:2]
-month = month[0:]
-print("month = " + month + "\n")
-
-#print("current date " + current_date)
-
-month = int(month)
-year = int(year)
-day = int(day)
-
-start_date = date(year, month, day)
 
 
 
-#print(start_date)
 
 def set_names_to_standard(worksheet_list_of_lists):
     for x in range(6,len(worksheet_list_of_lists)):
@@ -95,29 +69,13 @@ def get_indexs_of_name(name, worksheet_list_of_lists):
     return location_of_names
     
 
-
+#this function takes in a date object and returns a string in MM/DD/YYYY format
 def dateType_to_dateString(date):
-    date = str(date)
-    year = date[:4]
-    month = date[5:7]
-    day = date[8:]
-    if(month[0:-1] == "0"):
-        month = month[1:]
-    if(day[0:-1] == "0"):
-        day = day[1:]
-    complete_date = month + "/" + day + "/" + year
-
-    ##print("This is year in function " + year)
-    ##print("This is month in function " + month)
-    ##print("This is day in function " + day)
-    return complete_date
+    formatted_date = date.strftime("%m/%d/%Y")
+    return formatted_date
 
 
-worksheet_names = []
-
-
-
-def time_sheet_for_name(name, cumulative_hours):
+def time_sheet_for_name(name, cumulative_hours, workStudy_names_dict, worksheet_names):
     print(name + "\n")
     WS_hour_dict = workStudy_names_dict[name]
     cumulative_hours = float(cumulative_hours)
@@ -133,7 +91,7 @@ def time_sheet_for_name(name, cumulative_hours):
 
 
 
-def find_hours_in_specific_sheet_for_all_names(worksheet_list_of_lists):
+def find_hours_in_specific_sheet_for_all_names(worksheet_list_of_lists, workStudy_names_list, worksheet_name, workStudy_names_dict):
     for name in workStudy_names_list:
         locations_of_name = get_indexs_of_name(name, worksheet_list_of_lists)
         if(locations_of_name == []):
@@ -141,39 +99,79 @@ def find_hours_in_specific_sheet_for_all_names(worksheet_list_of_lists):
         total_hours = get_hour_value_for_day(locations_of_name, worksheet_list_of_lists)
         workStudy_names_dict[name][worksheet_name] = total_hours
 
+# this function takes in a credentials file name and returns a service account object
+def setupGspreadAccount(file_name):
+    sa = gspread.service_account(filename=file_name)
+    return sa
 
-loop = tqdm (total = 10, position = 0, leave = False)
-for x in range(10):
-    loop.set_description("Loading...".format(x))
-    loop.update(1)
-        # calculating end date by adding 10 days
-    if(x > 4):
-        x = x+2
-    new_date = start_date + timedelta(days=x)
-    new_date_string = dateType_to_dateString(new_date)
-    worksheet_name = new_date_string + " Sign-In Sheet"
-    print("worksheet name " + worksheet_name)
-    wks = sh.worksheet(worksheet_name)
-    worksheet_list_of_lists = wks.get_all_values()
-    worksheet_names.append(worksheet_name)
-    set_names_to_standard(worksheet_list_of_lists)
-    find_hours_in_specific_sheet_for_all_names(worksheet_list_of_lists)
+# this function takes in a service account object and a sheet name and returns a worksheet object
+def openSheet(sa, sheet_name):
+    sh = sa.open(sheet_name)
+    return sh
 
-loop.close()
-while True:
-    print("\n\n")
-    current_workstudy = input("Enter the last name of the workstudy you want to get the hours of\n")
-    print("\n")
-    if(current_workstudy == "exit"):
-        break
-    cumulative_hours = input("What was their cumulative hours last week\n")
-    print("\n")
-    cumulative_hours = float(cumulative_hours)
-    print("###############################\n")
-    time_sheet_for_name(current_workstudy, cumulative_hours)
-    
+#this function takes in a date in MM/DD/YYYY format and returns a datetime object
+def stringDateToDateTime(date):
+    date_str = str(date)
+    # Convert the date string to a datetime object
+    datetime_obj = datetime.strptime(date_str, "%m/%d/%Y")
+    datetime_obj = datetime_obj.date()
+    return datetime_obj
+
+#this functioon takes in a string of names in (Last, First), (Last, First) format and returns a dictionary of names in "Last, First" format
+def stringNamesToDict(string_names):
+    pattern = r'\(([^,]+), ([^)]+)\)'
+    matches = re.findall(pattern, string_names)
+    # Extract and format the matches
+    workStudy_names_dict = {", ".join(match): {} for match in matches}
+    return workStudy_names_dict
 
 
+def find_hours_in_all_sheets_for_all_names(credentials_filename, sheet_name, workstudy_stringNames, start_date, end_date):
+    #get service account 
+    sa = setupGspreadAccount(credentials_filename)
+    #get the spreadsheet
+    sh = openSheet(sa, sheet_name)
+    #get the start and end date in datetime format\
+    start_date = stringDateToDateTime(start_date)
+    end_date = stringDateToDateTime(end_date)
+    #get the work study names in a dict
+    workStudy_names_dict = stringNamesToDict(workstudy_stringNames)
+    #get the work study names in a list
+    workStudy_names_list = list(workStudy_names_dict.keys())
+    #get how many days to calculate worksheets for
+    time_difference = end_date - start_date
+    number_of_days = time_difference.days + 1
+    #how many weeks are between the start and end date to subtarct the amount of weekends
+    number_of_weeks = time_difference.days // 7
+    number_of_days = number_of_days - (number_of_weeks * 2)
+    new_date = start_date
+    #intialize the worksheet names list
+    worksheet_names = []
+    for x in range(number_of_days):
+        if (x == 0):
+            new_date = new_date
+        else:
+            #get the new date to calculate
+            new_date = new_date + timedelta(days=1)
+        #if it is a weekend day skip it
+        while(new_date.weekday() == 5 or new_date.weekday() == 6):
+            new_date = new_date + timedelta(days=1)
+        #get the date in string format
+        new_date_string = dateType_to_dateString(new_date)
+        #get the worksheet name
+        worksheet_name = new_date_string + " Sign-In Sheet"
+        #open the worksheet
+        wks = sh.worksheet(worksheet_name)
+        #get the list of lists of the worksheet
+        worksheet_list_of_lists = wks.get_all_values()
+        #not sure what this does
+        worksheet_names.append(worksheet_name)
+        #set the names to standard format
+        set_names_to_standard(worksheet_list_of_lists)
+        #find the hours for each name in the worksheet
+        find_hours_in_specific_sheet_for_all_names(worksheet_list_of_lists, workStudy_names_list, worksheet_name, workStudy_names_dict)
+
+    return workStudy_names_dict, worksheet_names
 
 
 
