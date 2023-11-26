@@ -265,7 +265,7 @@ cumulativeHoursTextBox.place(x=14, y=25)
 #create display button
 displayButtonFont = ("Helvetica", 12, "bold")
 displayButtonText = "Display"
-displayButton = customtkinter.CTkButton(root, height=30, width=120, text=displayButtonText, state='disabled')
+displayButton = customtkinter.CTkButton(root, height=30, width=120, text=displayButtonText)
 
 #place button
 displayButton.place(x=365, y=200)

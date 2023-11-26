@@ -8,11 +8,6 @@ def collect():
     total_work_study_names = totalWorkStudyNamesTextBox.get("0.0", "end-1c")
     credentials_filename = credentialsTextBox.get("0.0", "end-1c")
 
-
-    sheet_name = "Copy of 2023 Fall Semester Shift Sign-in Sheet, 10/30"
-    start_date = "10/16/2023"
-    end_date = "10/27/2023"
-    total_work_study_names = "(Mills, Marissa), (Butera, Salvatore), (Cancel, David), (Etyang, Arthur), (Godbey, Kaelyn), (Gomez, Kenny), (Ibarra, Christyanna), (Landes, Mahlon), (Mendoza, Vanessa), (Mihaileanu, George), (Nosike, Austin), (Pembleton, Aidan), (Potter, Chandler), (Quartey, Eric), (Ramirez, Jose), (Rodas, Melvin), (Rojas, Roberto), (Sandoval, Edwin), (Simons, Emma), (Tenet, Brooke), (West, Sydney), (Angelina, Zubricki)"
     credentials_filename = r"C:\Users\slopo\OneDrive\Desktop\firm-champion-381221-a86377f468ed.json"
     #collect the data from the gui and send it to the main function in python
     getTheHoursOfEveryWorkStudy(credentials_filename, sheet_name, total_work_study_names, start_date, end_date)
@@ -87,14 +82,10 @@ def backButtonClick():
     generateButton.place(x=438, y=565)
 
 
-
-
-
 def control(workStudy_names_dict, worksheet_names):
     #populate the listbox with the names
     putAllTheNamesInTheListBox(workStudy_names_dict)
     #when the display button is clicked
-    displayButton.configure(state="normal")
     displayButton.configure(command=lambda: displayButtonClick(workStudy_names_dict, worksheet_names))
 
 # this function initalizes widgets
