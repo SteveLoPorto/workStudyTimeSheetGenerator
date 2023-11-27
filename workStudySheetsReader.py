@@ -4,7 +4,6 @@ import time
 from datetime import date, datetime, timedelta
 import calendar
 import numpy as np
-from tqdm import tqdm
   
 
 

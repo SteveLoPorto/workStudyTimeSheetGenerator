@@ -8,7 +8,6 @@ def collect():
     total_work_study_names = totalWorkStudyNamesTextBox.get("0.0", "end-1c")
     credentials_filename = credentialsTextBox.get("0.0", "end-1c")
 
-    credentials_filename = r"C:\Users\slopo\OneDrive\Desktop\firm-champion-381221-a86377f468ed.json"
     #collect the data from the gui and send it to the main function in python
     getTheHoursOfEveryWorkStudy(credentials_filename, sheet_name, total_work_study_names, start_date, end_date)
 

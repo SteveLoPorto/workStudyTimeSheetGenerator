@@ -223,8 +223,10 @@ resultFrame = customtkinter.CTkFrame(master=root, width=450, height=400)
 resultFrame.place(x=525,y=125)
 
 
+workStudyResultListBoxFont = ("Helvetica", 12)
+
 #Defime work study result list 
-workStudyResultListBox = CTkListbox(resultFrame, width=395, height=325)
+workStudyResultListBox = CTkListbox(resultFrame, width=395, height=325, font=workStudyResultListBoxFont)
 
 #define work studyListBoxLabel
 workStudyResultListBoxLabelText = "Work Study Results"
@@ -289,6 +291,7 @@ infoButtonImage = Image.open('./guiImages/infoButton.png').resize((15,15))
 infoButtonPhoto = customtkinter.CTkImage(infoButtonImage, size=(15, 15))
 
 #info hover button for the workStudy ListBox
+
 workStudyResultListBoxInfoButton = customtkinter.CTkButton(resultFrame, image=infoButtonPhoto, text="", width=0, height=0, border_spacing=0, fg_color='transparent', hover=False)
 
 workStudyResultListBoxInfoButtonText = 'Displays the currently selected work studies hours.'
